@@ -16,3 +16,15 @@ Client movies display from Typescript and HTML
 
 ## Open VSCode
 `$ code ./`
+
+## Install dependencies and tools
+`$ npm i`
+
+`$ npm i -g http-server`
+
+## Build app and load it
+`$ npm run webpack:dev`
+
+`$ http-server`
+
+
