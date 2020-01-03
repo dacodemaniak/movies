@@ -101,11 +101,16 @@
  */
 class Main {
     constructor() {
-        console.log('Hello my Main!');
+        const title = document.querySelector('h1');
+        title.innerHTML = 'Hello HTML !';
     }
 }
 // Main app instanciation
-new Main();
+document.addEventListener('DOMContentLoaded', // Event to listen...
+() => {
+    console.log('Hey Buddy, i\'m ready... play now !');
+    new Main();
+});
 
 
 /***/ })
