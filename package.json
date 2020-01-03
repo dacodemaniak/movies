@@ -1,0 +1,30 @@
+{
+  "name": "poo",
+  "version": "1.0.0",
+  "description": "Initiation Objet et UML",
+  "main": "index.js",
+  "scripts": {
+    "babel": "babel --presets es2015 ./src/main.ts -o build/bundle.js",
+    "webpack:dev": "webpack --watch --mode=development",
+    "webpack:prod": "webpack --mode=production"
+  },
+  "keywords": [
+    "Typescript",
+    "classes",
+    "objets"
+  ],
+  "author": "Aélion",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "typescript": "^3.5.2",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5"
+  },
+  "devDependencies": {
+    "ts-loader": "^6.0.4"
+  }
+}
