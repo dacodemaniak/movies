@@ -9,18 +9,132 @@
         
         <!-- Add some styles -->
         <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-        
+        <link href="./assets/css/style.css" rel="stylesheet">
+        <link href="./assets/css/custom.css" rel="stylesheet">
+
+        <!-- Add application sources -->
         <script src="./build/bundle.chunk.js"></script>
         <script src="./build/bundle.js"></script>
     </head>
 
     <body>
-        <main app>
-            <!-- Dynamically populate h1 tag from JS-->
-            
-            <h1></h1>
+        <div class="container-fluid">
+            <div id="sticky-top-bar">
+                <header class="row">
+                    <div class="col-3">
+                        <nav class="navbar navbar-dark bg-dark">
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                        
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item active">
+                                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="#">Link</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                                </li>
+                            </ul>
+                            </div>
+                        </nav>
+                    </div>
 
-        </main>
+                    <div class="col-6">
+                        <h1></h1>
+                    </div>
 
+                    <div class="col-3">
+                        <span class="icon-key"></span>
+                    </div>
+                </header>
+            </div>
+
+            <!-- Main content of App -->
+            <main app class="row">
+                <div class="col-12">
+                    <form id="search-form">
+                        <input
+                            type="search"
+                            placeholder="Chercher..."
+                            maxlength="75"
+                            class="form-control"
+                        >
+                    </form>                    
+                </div>
+
+                <div class="col-12">
+                    <!-- Results table -->
+                    <table class="table table-condensed table-responsive">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input
+                                        type="checkbox"
+                                        id="select-deselect"
+                                    >
+                                </th>
+                                <th>
+                                    Titre ou Nom
+                                </th>
+                                <th>
+                                    &nbsp;
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        class="check-row"
+                                    >                                    
+                                </td>
+                                <td>
+                                    Blah
+                                </td>
+                                <td>
+                                    <span class="icon-plus"></span>
+                                </td>
+                            </tr>
+
+                            
+                            <tr>
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        class="check-row"
+                                    >                                    
+                                </td>
+                                <td>
+                                    Blih
+                                </td>
+                                <td>
+                                    <span class="icon-plus"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        class="check-row"
+                                    >                                    
+                                </td>
+                                <td>
+                                    Bluh
+                                </td>
+                                <td>
+                                    <span class="icon-plus"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
     </body>
 </html>

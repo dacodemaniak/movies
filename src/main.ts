@@ -7,7 +7,7 @@
 class Main {
     public constructor(){
         const title: HTMLElement = document.querySelector('h1');
-        title.innerHTML = 'Hello HTML !';
+        title.innerHTML = 'Movies';
     }
 }
 
