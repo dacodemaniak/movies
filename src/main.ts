@@ -1,3 +1,5 @@
+import { ManageCheckbox } from "./manage-checkbox";
+
 /**
  * @name Main
  * @author Jean-Luc (jla.webprojet@gmail.com) - Jan. 2020
@@ -17,5 +19,8 @@ document.addEventListener(
     () => { // What to do when event is triggered
         console.log('Hey Buddy, i\'m ready... play now !');
         new Main();
+
+        // Instanciation of ManageCheckbox
+        new ManageCheckbox();
     }
 );
