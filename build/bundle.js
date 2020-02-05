@@ -9451,6 +9451,39 @@ module.exports = function (module) {
 
 /***/ }),
 
+/***/ "./src/components/row/row-component.ts":
+/*!*********************************************!*\
+  !*** ./src/components/row/row-component.ts ***!
+  \*********************************************/
+/*! exports provided: RowComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RowComponent", function() { return RowComponent; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+class RowComponent {
+    constructor(movie) {
+        this.movie = movie;
+    }
+    load() {
+        return new Promise((resolve) => {
+            jquery__WEBPACK_IMPORTED_MODULE_0__["get"]('/src/components/row/view/row.view.html', (view) => {
+                const jqView = jquery__WEBPACK_IMPORTED_MODULE_0__(view);
+                jqView.find('[title]').html(this.movie.title);
+                jqView.find('[more]')
+                    .attr('data-rel', this.movie.id);
+                resolve(jqView);
+            });
+        });
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/main.ts":
 /*!*********************!*\
   !*** ./src/main.ts ***!
@@ -9460,11 +9493,8 @@ module.exports = function (module) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _manage_checkbox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./manage-checkbox */ "./src/manage-checkbox.ts");
-/* harmony import */ var _spinner_loader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./spinner-loader */ "./src/spinner-loader.ts");
-
+/* harmony import */ var _spinner_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./spinner-loader */ "./src/spinner-loader.ts");
+/* harmony import */ var _search_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./search-component */ "./src/search-component.ts");
 
 
 /**
@@ -9475,49 +9505,12 @@ __webpack_require__.r(__webpack_exports__);
  */
 class Main {
     constructor() {
-        const loader = new _spinner_loader__WEBPACK_IMPORTED_MODULE_2__["SpinnerLoader"]();
+        const loader = new _spinner_loader__WEBPACK_IMPORTED_MODULE_0__["SpinnerLoader"]();
         loader.present();
         const title = document.querySelector('h1');
         title.innerHTML = 'Movies';
-        // Load movies from backend
-        jquery__WEBPACK_IMPORTED_MODULE_0__["ajax"]({
-            url: 'http://localhost:8080/api/movie',
-            method: 'get',
-            dataType: 'json',
-            success: (response) => {
-                if (response.length) {
-                    response.forEach((movie, index) => {
-                        const tableRow = jquery__WEBPACK_IMPORTED_MODULE_0__('<tr>');
-                        const checkBoxDivider = jquery__WEBPACK_IMPORTED_MODULE_0__('<td>');
-                        const checkBox = jquery__WEBPACK_IMPORTED_MODULE_0__('<input>');
-                        checkBox
-                            .attr('type', 'checkbox')
-                            .addClass('check-row')
-                            .appendTo(checkBoxDivider);
-                        const titleDivider = jquery__WEBPACK_IMPORTED_MODULE_0__('<td>');
-                        titleDivider.html(`${movie.title} - ${movie.year}`);
-                        const moreDivider = jquery__WEBPACK_IMPORTED_MODULE_0__('<td>');
-                        const icon = jquery__WEBPACK_IMPORTED_MODULE_0__('<span>');
-                        icon
-                            .addClass('icon-plus')
-                            .appendTo(moreDivider);
-                        // Stack cells into row
-                        tableRow
-                            .append(checkBoxDivider)
-                            .append(titleDivider)
-                            .append(moreDivider);
-                        // Display new row in tbody
-                        jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(tableRow);
-                    });
-                    // Instanciation of ManageCheckbox
-                    new _manage_checkbox__WEBPACK_IMPORTED_MODULE_1__["ManageCheckbox"]();
-                }
-            },
-            error: (xhr, error) => {
-                console.log(`Something went wrong ${error}`);
-            }
-        });
         loader.dismiss();
+        const searchComponent = new _search_component__WEBPACK_IMPORTED_MODULE_1__["SearchComponent"]();
     }
 }
 // Main app instanciation
@@ -9530,37 +9523,123 @@ document.addEventListener('DOMContentLoaded', // Event to listen...
 
 /***/ }),
 
-/***/ "./src/manage-checkbox.ts":
-/*!********************************!*\
-  !*** ./src/manage-checkbox.ts ***!
-  \********************************/
-/*! exports provided: ManageCheckbox */
+/***/ "./src/models/movie-model.ts":
+/*!***********************************!*\
+  !*** ./src/models/movie-model.ts ***!
+  \***********************************/
+/*! exports provided: MovieModel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ManageCheckbox", function() { return ManageCheckbox; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MovieModel", function() { return MovieModel; });
+class MovieModel {
+    get id() {
+        return this._id;
+    }
+    get title() {
+        return this._title;
+    }
+    get year() {
+        return this._year;
+    }
+    deserialize(movie) {
+        this._id = movie.idMovie;
+        this._title = movie.title;
+        this._year = movie.year;
+        return this;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/search-component.ts":
+/*!*********************************!*\
+  !*** ./src/search-component.ts ***!
+  \*********************************/
+/*! exports provided: SearchComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchComponent", function() { return SearchComponent; });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_movie_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./services/movie-service */ "./src/services/movie-service.ts");
+/* harmony import */ var _components_row_row_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/row/row-component */ "./src/components/row/row-component.ts");
 
-/**
- * @name ManageCheckbox
- * @author Aélion - Feb. 2020
- * @version 1.0.0
- *  Manage checkboxes of the movies / actors table
- */
-class ManageCheckbox {
+
+
+class SearchComponent {
     constructor() {
-        this._setHandlers();
+        this.service = new _services_movie_service__WEBPACK_IMPORTED_MODULE_1__["MovieService"]();
+        this._setHandler();
     }
-    _setHandlers() {
-        jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').on('click', // Event to listen to
-        (event) => {
-            jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').prop('checked', jquery__WEBPACK_IMPORTED_MODULE_0__(event.target).prop('checked'));
+    _setHandler() {
+        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('keyup', (event) => {
+            const searchField = jquery__WEBPACK_IMPORTED_MODULE_0__(event.target);
+            if (searchField.val().toString().trim().length >= 2) {
+                // Call service...
+                this.service.getByTitle(searchField.val().toString().trim()).then((movies) => {
+                    movies.forEach((movie, index) => {
+                        const rowComponent = new _components_row_row_component__WEBPACK_IMPORTED_MODULE_2__["RowComponent"](movie);
+                        rowComponent.load().then((row) => {
+                            jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(row);
+                        });
+                    });
+                });
+            }
         });
-        jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').on('click', (event) => {
-            const isChecked = jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row:checked').length === jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').length;
-            jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').prop('checked', isChecked);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/services/movie-service.ts":
+/*!***************************************!*\
+  !*** ./src/services/movie-service.ts ***!
+  \***************************************/
+/*! exports provided: MovieService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MovieService", function() { return MovieService; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _models_movie_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../models/movie-model */ "./src/models/movie-model.ts");
+
+
+class MovieService {
+    constructor() {
+        this.api = 'http://localhost:8080/api/movie';
+        this.httpVerb = 'get';
+        this.dataType = 'json';
+    }
+    getAll() {
+        this.uri = this.api;
+        return this.httpClient();
+    }
+    getByTitle(title) {
+        this.uri = `${this.api}/title/${title}`;
+        return this.httpClient();
+    }
+    httpClient() {
+        return new Promise((resolve) => {
+            let movies = new Array();
+            jquery__WEBPACK_IMPORTED_MODULE_0__["ajax"]({
+                url: this.uri,
+                method: this.httpVerb,
+                dataType: this.dataType,
+                success: (response) => {
+                    movies = response.map((movie, index) => {
+                        return new _models_movie_model__WEBPACK_IMPORTED_MODULE_1__["MovieModel"]().deserialize(movie);
+                    });
+                    resolve(movies);
+                }
+            });
         });
     }
 }
