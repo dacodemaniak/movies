@@ -10,6 +10,9 @@ class Main {
     public constructor(){
         const title: HTMLElement = document.querySelector('h1');
         title.innerHTML = 'Movies';
+        
+        // Instanciation of ManageCheckbox
+        new ManageCheckbox();
     }
 }
 
@@ -19,8 +22,5 @@ document.addEventListener(
     () => { // What to do when event is triggered
         console.log('Hey Buddy, i\'m ready... play now !');
         new Main();
-
-        // Instanciation of ManageCheckbox
-        new ManageCheckbox();
     }
 );
