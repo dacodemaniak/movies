@@ -19,8 +19,9 @@ export class ManageCheckbox {
             }
         );
 
-        $('.check-row').on(
+        $('tbody').on(
             'click',
+            '.check-row',
             (event: any): void => {
                 const isChecked: boolean = $('.check-row:checked').length === $('.check-row').length;
                 $('#select-deselect').prop('checked', isChecked);

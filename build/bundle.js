@@ -9523,6 +9523,44 @@ document.addEventListener('DOMContentLoaded', // Event to listen...
 
 /***/ }),
 
+/***/ "./src/manage-checkbox.ts":
+/*!********************************!*\
+  !*** ./src/manage-checkbox.ts ***!
+  \********************************/
+/*! exports provided: ManageCheckbox */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ManageCheckbox", function() { return ManageCheckbox; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+/**
+ * @name ManageCheckbox
+ * @author Aélion - Feb. 2020
+ * @version 1.0.0
+ *  Manage checkboxes of the movies / actors table
+ */
+class ManageCheckbox {
+    constructor() {
+        this._setHandlers();
+    }
+    _setHandlers() {
+        jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').on('click', // Event to listen to
+        (event) => {
+            jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').prop('checked', jquery__WEBPACK_IMPORTED_MODULE_0__(event.target).prop('checked'));
+        });
+        jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').on('click', '.check-row', (event) => {
+            const isChecked = jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row:checked').length === jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').length;
+            jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').prop('checked', isChecked);
+        });
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/models/movie-model.ts":
 /*!***********************************!*\
   !*** ./src/models/movie-model.ts ***!
@@ -9568,6 +9606,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _services_movie_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./services/movie-service */ "./src/services/movie-service.ts");
 /* harmony import */ var _components_row_row_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/row/row-component */ "./src/components/row/row-component.ts");
+/* harmony import */ var _manage_checkbox__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./manage-checkbox */ "./src/manage-checkbox.ts");
+
 
 
 
@@ -9588,9 +9628,20 @@ class SearchComponent {
                             jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(row);
                         });
                     });
+                    new _manage_checkbox__WEBPACK_IMPORTED_MODULE_3__["ManageCheckbox"]();
                 });
             }
+            else {
+                // Removes all previous rows
+                this._removeRows();
+            }
         });
+        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('search', (event) => {
+            this._removeRows();
+        });
+    }
+    _removeRows() {
+        jquery__WEBPACK_IMPORTED_MODULE_0__('tbody tr').remove();
     }
 }
 
