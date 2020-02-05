@@ -9461,6 +9461,8 @@ module.exports = function (module) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _manage_checkbox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./manage-checkbox */ "./src/manage-checkbox.ts");
+/* harmony import */ var _spinner_loader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./spinner-loader */ "./src/spinner-loader.ts");
+
 
 /**
  * @name Main
@@ -9470,8 +9472,13 @@ __webpack_require__.r(__webpack_exports__);
  */
 class Main {
     constructor() {
+        const loader = new _spinner_loader__WEBPACK_IMPORTED_MODULE_1__["SpinnerLoader"]();
+        loader.present();
         const title = document.querySelector('h1');
         title.innerHTML = 'Movies';
+        // Instanciation of ManageCheckbox
+        new _manage_checkbox__WEBPACK_IMPORTED_MODULE_0__["ManageCheckbox"]();
+        loader.dismiss();
     }
 }
 // Main app instanciation
@@ -9479,8 +9486,6 @@ document.addEventListener('DOMContentLoaded', // Event to listen...
 () => {
     console.log('Hey Buddy, i\'m ready... play now !');
     new Main();
-    // Instanciation of ManageCheckbox
-    new _manage_checkbox__WEBPACK_IMPORTED_MODULE_0__["ManageCheckbox"]();
 });
 
 
@@ -9515,8 +9520,59 @@ class ManageCheckbox {
             jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').prop('checked', jquery__WEBPACK_IMPORTED_MODULE_0__(event.target).prop('checked'));
         });
         jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').on('click', (event) => {
-            jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').prop('checked', jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row:checked').length === jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').length);
+            const isChecked = jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row:checked').length === jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').length;
+            jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').prop('checked', isChecked);
         });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/spinner-loader.ts":
+/*!*******************************!*\
+  !*** ./src/spinner-loader.ts ***!
+  \*******************************/
+/*! exports provided: SpinnerLoader */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpinnerLoader", function() { return SpinnerLoader; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+/**
+ * @name SpinnerLoader
+ * @author Aélion - Feb. 2020
+ * @version 1.0.0
+ *  Spinner loader service
+ */
+class SpinnerLoader {
+    constructor() {
+        this._spinnerBuilder();
+    }
+    present() {
+        console.log('Show the loader');
+        this.loader.appendTo(jquery__WEBPACK_IMPORTED_MODULE_0__('body'));
+    }
+    dismiss() {
+        setTimeout(() => {
+            this.loader.remove();
+            console.log('Loader was gone');
+        }, 1500);
+    }
+    _spinnerBuilder() {
+        // Create the outer div of the spinner
+        this.loader = jquery__WEBPACK_IMPORTED_MODULE_0__('<div>');
+        this.loader.addClass('outer-loader');
+        const inner = jquery__WEBPACK_IMPORTED_MODULE_0__('<div>');
+        inner.addClass('inner-loader');
+        const spinner = jquery__WEBPACK_IMPORTED_MODULE_0__('<img>');
+        spinner.attr('src', '/assets/images/loader.gif');
+        // Stack DOM elements into loader property
+        inner.append(spinner); // Stack spinner into inner
+        this.loader.append(inner); // Stack inner into outer
     }
 }
 

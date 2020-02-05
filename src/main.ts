@@ -1,4 +1,5 @@
 import { ManageCheckbox } from "./manage-checkbox";
+import { SpinnerLoader } from "./spinner-loader";
 
 /**
  * @name Main
@@ -8,11 +9,16 @@ import { ManageCheckbox } from "./manage-checkbox";
  */
 class Main {
     public constructor(){
+        const loader: SpinnerLoader = new SpinnerLoader();
+        loader.present();
+
         const title: HTMLElement = document.querySelector('h1');
         title.innerHTML = 'Movies';
         
         // Instanciation of ManageCheckbox
         new ManageCheckbox();
+
+        loader.dismiss();
     }
 }
 
