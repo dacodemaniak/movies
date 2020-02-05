@@ -20,7 +20,8 @@ export class SearchComponent {
                 const searchField: JQuery = $(event.target);
                 if (searchField.val().toString().trim().length >= 2) {
                     // Call service...
-                    this.service.getByTitle(searchField.val().toString().trim()).then((movies: MovieModel[]) => {
+                    this.service.getByTitle(searchField.val().toString().trim())
+                    .then((movies: MovieModel[]) => {
                         movies.forEach((movie: MovieModel, index: number) => {
                             const rowComponent: RowComponent = new RowComponent(movie);
                             rowComponent.load().then((row: JQuery) => {

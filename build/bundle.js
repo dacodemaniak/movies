@@ -9582,6 +9582,7 @@ class MovieModel {
         return this._year;
     }
     deserialize(movie) {
+        //Object.assign(this, movie);
         this._id = movie.idMovie;
         this._title = movie.title;
         this._year = movie.year;
@@ -9621,7 +9622,8 @@ class SearchComponent {
             const searchField = jquery__WEBPACK_IMPORTED_MODULE_0__(event.target);
             if (searchField.val().toString().trim().length >= 2) {
                 // Call service...
-                this.service.getByTitle(searchField.val().toString().trim()).then((movies) => {
+                this.service.getByTitle(searchField.val().toString().trim())
+                    .then((movies) => {
                     movies.forEach((movie, index) => {
                         const rowComponent = new _components_row_row_component__WEBPACK_IMPORTED_MODULE_2__["RowComponent"](movie);
                         rowComponent.load().then((row) => {

@@ -16,6 +16,8 @@ export class MovieModel {
     }
 
     public deserialize(movie: any): MovieModel {
+        //Object.assign(this, movie);
+
         this._id = movie.idMovie;
         this._title = movie.title;
         this._year = movie.year;
