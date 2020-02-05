@@ -9460,8 +9460,11 @@ module.exports = function (module) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _manage_checkbox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./manage-checkbox */ "./src/manage-checkbox.ts");
-/* harmony import */ var _spinner_loader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./spinner-loader */ "./src/spinner-loader.ts");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _manage_checkbox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./manage-checkbox */ "./src/manage-checkbox.ts");
+/* harmony import */ var _spinner_loader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./spinner-loader */ "./src/spinner-loader.ts");
+
 
 
 /**
@@ -9472,12 +9475,48 @@ __webpack_require__.r(__webpack_exports__);
  */
 class Main {
     constructor() {
-        const loader = new _spinner_loader__WEBPACK_IMPORTED_MODULE_1__["SpinnerLoader"]();
+        const loader = new _spinner_loader__WEBPACK_IMPORTED_MODULE_2__["SpinnerLoader"]();
         loader.present();
         const title = document.querySelector('h1');
         title.innerHTML = 'Movies';
-        // Instanciation of ManageCheckbox
-        new _manage_checkbox__WEBPACK_IMPORTED_MODULE_0__["ManageCheckbox"]();
+        // Load movies from backend
+        jquery__WEBPACK_IMPORTED_MODULE_0__["ajax"]({
+            url: 'http://localhost:8080/api/movie',
+            method: 'get',
+            dataType: 'json',
+            success: (response) => {
+                if (response.length) {
+                    response.forEach((movie, index) => {
+                        const tableRow = jquery__WEBPACK_IMPORTED_MODULE_0__('<tr>');
+                        const checkBoxDivider = jquery__WEBPACK_IMPORTED_MODULE_0__('<td>');
+                        const checkBox = jquery__WEBPACK_IMPORTED_MODULE_0__('<input>');
+                        checkBox
+                            .attr('type', 'checkbox')
+                            .addClass('check-row')
+                            .appendTo(checkBoxDivider);
+                        const titleDivider = jquery__WEBPACK_IMPORTED_MODULE_0__('<td>');
+                        titleDivider.html(`${movie.title} - ${movie.year}`);
+                        const moreDivider = jquery__WEBPACK_IMPORTED_MODULE_0__('<td>');
+                        const icon = jquery__WEBPACK_IMPORTED_MODULE_0__('<span>');
+                        icon
+                            .addClass('icon-plus')
+                            .appendTo(moreDivider);
+                        // Stack cells into row
+                        tableRow
+                            .append(checkBoxDivider)
+                            .append(titleDivider)
+                            .append(moreDivider);
+                        // Display new row in tbody
+                        jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(tableRow);
+                    });
+                    // Instanciation of ManageCheckbox
+                    new _manage_checkbox__WEBPACK_IMPORTED_MODULE_1__["ManageCheckbox"]();
+                }
+            },
+            error: (xhr, error) => {
+                console.log(`Something went wrong ${error}`);
+            }
+        });
         loader.dismiss();
     }
 }
