@@ -7,7 +7,7 @@ import { SpinnerLoader } from './../../core/modules/spinner/spinner-loader';
 
 export class SearchComponent {
     private service: MovieService;
-    private movies: MovieModel[];
+    private movies: MovieModel[]; // State
     private spinner: SpinnerLoader;
 
     public constructor() {
@@ -44,6 +44,7 @@ export class SearchComponent {
                 } else {
                     // Removes all previous rows
                     this._removeRows();
+                    this.movies = [];
                 } 
             }
         );
@@ -52,6 +53,7 @@ export class SearchComponent {
             'search',
             (event: any): void => {
                 this._removeRows();
+                this.movies = [];
             }
         );
     }
@@ -62,6 +64,7 @@ export class SearchComponent {
 
     private _compareTo(movies: Array<MovieModel>): boolean {
         let isEqual: boolean = false;
+
         const input: Array<MovieModel> = movies.slice().sort(MovieModel.compare);
         const state: Array<MovieModel> = this.movies.slice().sort(MovieModel.compare);
 
@@ -70,6 +73,8 @@ export class SearchComponent {
                 state.forEach((stateMovie: MovieModel, index: number) => {
                     if (stateMovie.compareTo(input[index])) {
                         isEqual = true;
+                    } else {
+                        isEqual = false;
                     }
                 });
             }
