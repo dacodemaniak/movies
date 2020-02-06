@@ -28,7 +28,7 @@ export class SpinnerLoader {
                 this.loader.remove();
                 console.log('Loader was gone');
             },
-            1500
+            500
         );
     }
 

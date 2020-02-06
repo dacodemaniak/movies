@@ -1,4 +1,6 @@
-export class MovieModel {
+import { Comparable } from "../core/interfaces/comparable-interface";
+
+export class MovieModel implements Comparable<MovieModel>{
     private _id: number;
     private _title: string;
     private _year:string;
@@ -15,10 +17,21 @@ export class MovieModel {
         return this._year;
     }
 
+    public static compare(a: MovieModel, b: MovieModel): number {
+        if ( a.id < b.id ){
+            return -1;
+        }
+
+        if ( a.id > b.id ){
+            return 1;
+        }
+        
+        return 0;
+    }
     public compareTo(movie: MovieModel): boolean {
         return this._id === movie.id;
     }
-    
+
     public deserialize(movie: any): MovieModel {
         //Object.assign(this, movie);
 

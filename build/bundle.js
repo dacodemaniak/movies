@@ -9484,6 +9484,140 @@ class RowComponent {
 
 /***/ }),
 
+/***/ "./src/components/search/search-component.ts":
+/*!***************************************************!*\
+  !*** ./src/components/search/search-component.ts ***!
+  \***************************************************/
+/*! exports provided: SearchComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchComponent", function() { return SearchComponent; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_movie_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/movie-service */ "./src/services/movie-service.ts");
+/* harmony import */ var _models_movie_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../models/movie-model */ "./src/models/movie-model.ts");
+/* harmony import */ var _row_row_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../row/row-component */ "./src/components/row/row-component.ts");
+/* harmony import */ var _manage_checkbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../manage-checkbox */ "./src/manage-checkbox.ts");
+/* harmony import */ var _core_modules_spinner_spinner_loader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../core/modules/spinner/spinner-loader */ "./src/core/modules/spinner/spinner-loader.ts");
+
+
+
+
+
+
+class SearchComponent {
+    constructor() {
+        this.service = new _services_movie_service__WEBPACK_IMPORTED_MODULE_1__["MovieService"]();
+        this.movies = new Array();
+        this.spinner = new _core_modules_spinner_spinner_loader__WEBPACK_IMPORTED_MODULE_5__["SpinnerLoader"]();
+        this._setHandler();
+    }
+    _setHandler() {
+        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('keyup', (event) => {
+            const searchField = jquery__WEBPACK_IMPORTED_MODULE_0__(event.target);
+            if (searchField.val().toString().trim().length >= 2) {
+                this.spinner.present();
+                // Call service...
+                this.service.getByTitle(searchField.val().toString().trim())
+                    .then((movies) => {
+                    if (!this._compareTo(movies)) {
+                        this.movies = movies;
+                        this._removeRows();
+                        movies.forEach((movie, index) => {
+                            const rowComponent = new _row_row_component__WEBPACK_IMPORTED_MODULE_3__["RowComponent"](movie);
+                            rowComponent.load().then((row) => {
+                                jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(row);
+                            });
+                        });
+                        new _manage_checkbox__WEBPACK_IMPORTED_MODULE_4__["ManageCheckbox"]();
+                    }
+                });
+                this.spinner.dismiss();
+            }
+            else {
+                // Removes all previous rows
+                this._removeRows();
+            }
+        });
+        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('search', (event) => {
+            this._removeRows();
+        });
+    }
+    _removeRows() {
+        jquery__WEBPACK_IMPORTED_MODULE_0__('tbody tr').remove();
+    }
+    _compareTo(movies) {
+        let isEqual = false;
+        const input = movies.slice().sort(_models_movie_model__WEBPACK_IMPORTED_MODULE_2__["MovieModel"].compare);
+        const state = this.movies.slice().sort(_models_movie_model__WEBPACK_IMPORTED_MODULE_2__["MovieModel"].compare);
+        if (state.length !== 0) {
+            if (input.length === state.length) {
+                state.forEach((stateMovie, index) => {
+                    if (stateMovie.compareTo(input[index])) {
+                        isEqual = true;
+                    }
+                });
+            }
+        }
+        return isEqual;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/core/modules/spinner/spinner-loader.ts":
+/*!****************************************************!*\
+  !*** ./src/core/modules/spinner/spinner-loader.ts ***!
+  \****************************************************/
+/*! exports provided: SpinnerLoader */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpinnerLoader", function() { return SpinnerLoader; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+/**
+ * @name SpinnerLoader
+ * @author Aélion - Feb. 2020
+ * @version 1.0.0
+ *  Spinner loader service
+ */
+class SpinnerLoader {
+    constructor() {
+        this._spinnerBuilder();
+    }
+    present() {
+        console.log('Show the loader');
+        this.loader.appendTo(jquery__WEBPACK_IMPORTED_MODULE_0__('body'));
+    }
+    dismiss() {
+        setTimeout(() => {
+            this.loader.remove();
+            console.log('Loader was gone');
+        }, 500);
+    }
+    _spinnerBuilder() {
+        // Create the outer div of the spinner
+        this.loader = jquery__WEBPACK_IMPORTED_MODULE_0__('<div>');
+        this.loader.addClass('outer-loader');
+        const inner = jquery__WEBPACK_IMPORTED_MODULE_0__('<div>');
+        inner.addClass('inner-loader');
+        const spinner = jquery__WEBPACK_IMPORTED_MODULE_0__('<img>');
+        spinner.attr('src', '/assets/images/loader.gif');
+        // Stack DOM elements into loader property
+        inner.append(spinner); // Stack spinner into inner
+        this.loader.append(inner); // Stack inner into outer
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/main.ts":
 /*!*********************!*\
   !*** ./src/main.ts ***!
@@ -9493,8 +9627,8 @@ class RowComponent {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _spinner_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./spinner-loader */ "./src/spinner-loader.ts");
-/* harmony import */ var _search_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./search-component */ "./src/search-component.ts");
+/* harmony import */ var _core_modules_spinner_spinner_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core/modules/spinner/spinner-loader */ "./src/core/modules/spinner/spinner-loader.ts");
+/* harmony import */ var _components_search_search_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/search/search-component */ "./src/components/search/search-component.ts");
 
 
 /**
@@ -9505,12 +9639,12 @@ __webpack_require__.r(__webpack_exports__);
  */
 class Main {
     constructor() {
-        const loader = new _spinner_loader__WEBPACK_IMPORTED_MODULE_0__["SpinnerLoader"]();
+        const loader = new _core_modules_spinner_spinner_loader__WEBPACK_IMPORTED_MODULE_0__["SpinnerLoader"]();
         loader.present();
         const title = document.querySelector('h1');
         title.innerHTML = 'Movies';
         loader.dismiss();
-        const searchComponent = new _search_component__WEBPACK_IMPORTED_MODULE_1__["SearchComponent"]();
+        const searchComponent = new _components_search_search_component__WEBPACK_IMPORTED_MODULE_1__["SearchComponent"]();
     }
 }
 // Main app instanciation
@@ -9581,6 +9715,15 @@ class MovieModel {
     get year() {
         return this._year;
     }
+    static compare(a, b) {
+        if (a.id < b.id) {
+            return -1;
+        }
+        if (a.id > b.id) {
+            return 1;
+        }
+        return 0;
+    }
     compareTo(movie) {
         return this._id === movie.id;
     }
@@ -9590,80 +9733,6 @@ class MovieModel {
         this._title = movie.title;
         this._year = movie.year;
         return this;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/search-component.ts":
-/*!*********************************!*\
-  !*** ./src/search-component.ts ***!
-  \*********************************/
-/*! exports provided: SearchComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchComponent", function() { return SearchComponent; });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_movie_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./services/movie-service */ "./src/services/movie-service.ts");
-/* harmony import */ var _components_row_row_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/row/row-component */ "./src/components/row/row-component.ts");
-/* harmony import */ var _manage_checkbox__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./manage-checkbox */ "./src/manage-checkbox.ts");
-
-
-
-
-class SearchComponent {
-    constructor() {
-        this.service = new _services_movie_service__WEBPACK_IMPORTED_MODULE_1__["MovieService"]();
-        this.movies = new Array();
-        this._setHandler();
-    }
-    _setHandler() {
-        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('keyup', (event) => {
-            const searchField = jquery__WEBPACK_IMPORTED_MODULE_0__(event.target);
-            if (searchField.val().toString().trim().length >= 2) {
-                // Call service...
-                this.service.getByTitle(searchField.val().toString().trim())
-                    .then((movies) => {
-                    if (!this._compareTo(movies)) {
-                        this._removeRows();
-                        movies.forEach((movie, index) => {
-                            const rowComponent = new _components_row_row_component__WEBPACK_IMPORTED_MODULE_2__["RowComponent"](movie);
-                            rowComponent.load().then((row) => {
-                                jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(row);
-                            });
-                        });
-                        new _manage_checkbox__WEBPACK_IMPORTED_MODULE_3__["ManageCheckbox"]();
-                    }
-                });
-            }
-            else {
-                // Removes all previous rows
-                this._removeRows();
-            }
-        });
-        jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('search', (event) => {
-            this._removeRows();
-        });
-    }
-    _removeRows() {
-        jquery__WEBPACK_IMPORTED_MODULE_0__('tbody tr').remove();
-    }
-    _compareTo(movies) {
-        let isEqual = false;
-        if (this.movies.length !== 0) {
-            if (movies.length === this.movies.length) {
-                this.movies.forEach((stateMovie, index) => {
-                    if (stateMovie.compareTo(movies[index])) {
-                        isEqual = true;
-                    }
-                });
-            }
-        }
-        return isEqual;
     }
 }
 
@@ -9714,56 +9783,6 @@ class MovieService {
                 }
             });
         });
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/spinner-loader.ts":
-/*!*******************************!*\
-  !*** ./src/spinner-loader.ts ***!
-  \*******************************/
-/*! exports provided: SpinnerLoader */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpinnerLoader", function() { return SpinnerLoader; });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-
-/**
- * @name SpinnerLoader
- * @author Aélion - Feb. 2020
- * @version 1.0.0
- *  Spinner loader service
- */
-class SpinnerLoader {
-    constructor() {
-        this._spinnerBuilder();
-    }
-    present() {
-        console.log('Show the loader');
-        this.loader.appendTo(jquery__WEBPACK_IMPORTED_MODULE_0__('body'));
-    }
-    dismiss() {
-        setTimeout(() => {
-            this.loader.remove();
-            console.log('Loader was gone');
-        }, 1500);
-    }
-    _spinnerBuilder() {
-        // Create the outer div of the spinner
-        this.loader = jquery__WEBPACK_IMPORTED_MODULE_0__('<div>');
-        this.loader.addClass('outer-loader');
-        const inner = jquery__WEBPACK_IMPORTED_MODULE_0__('<div>');
-        inner.addClass('inner-loader');
-        const spinner = jquery__WEBPACK_IMPORTED_MODULE_0__('<img>');
-        spinner.attr('src', '/assets/images/loader.gif');
-        // Stack DOM elements into loader property
-        inner.append(spinner); // Stack spinner into inner
-        this.loader.append(inner); // Stack inner into outer
     }
 }
 
