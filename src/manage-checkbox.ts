@@ -16,6 +16,11 @@ export class ManageCheckbox {
             'click', // Event to listen to
             (event: any): void => {
                 $('.check-row').prop('checked', $(event.target).prop('checked'));
+                if ($(event.target).prop('checked')) {
+                    $('#add-to-wish-list').removeAttr('disabled');
+                } else {
+                    $('#add-to-wish-list').attr('disabled', 'disabled');
+                }
             }
         );
 
@@ -25,6 +30,16 @@ export class ManageCheckbox {
             (event: any): void => {
                 const isChecked: boolean = $('.check-row:checked').length === $('.check-row').length;
                 $('#select-deselect').prop('checked', isChecked);
+                
+                // if any was selected
+                if ($(event.target).prop('checked')) {
+                    $('#add-to-wish-list').removeAttr('disabled');
+                } else {
+                    if ($('.check-row:checked').length)
+                        $('#add-to-wish-list').removeAttr('disabled');
+                    else
+                        $('#add-to-wish-list').attr('disabled', 'disabled');
+                }
             }
         )
     }

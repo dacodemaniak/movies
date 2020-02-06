@@ -9539,10 +9539,12 @@ class SearchComponent {
             else {
                 // Removes all previous rows
                 this._removeRows();
+                this.movies = [];
             }
         });
         jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('search', (event) => {
             this._removeRows();
+            this.movies = [];
         });
     }
     _removeRows() {
@@ -9557,6 +9559,9 @@ class SearchComponent {
                 state.forEach((stateMovie, index) => {
                     if (stateMovie.compareTo(input[index])) {
                         isEqual = true;
+                    }
+                    else {
+                        isEqual = false;
                     }
                 });
             }
@@ -9684,10 +9689,26 @@ class ManageCheckbox {
         jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').on('click', // Event to listen to
         (event) => {
             jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').prop('checked', jquery__WEBPACK_IMPORTED_MODULE_0__(event.target).prop('checked'));
+            if (jquery__WEBPACK_IMPORTED_MODULE_0__(event.target).prop('checked')) {
+                jquery__WEBPACK_IMPORTED_MODULE_0__('#add-to-wish-list').removeAttr('disabled');
+            }
+            else {
+                jquery__WEBPACK_IMPORTED_MODULE_0__('#add-to-wish-list').attr('disabled', 'disabled');
+            }
         });
         jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').on('click', '.check-row', (event) => {
             const isChecked = jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row:checked').length === jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').length;
             jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').prop('checked', isChecked);
+            // if any was selected
+            if (jquery__WEBPACK_IMPORTED_MODULE_0__(event.target).prop('checked')) {
+                jquery__WEBPACK_IMPORTED_MODULE_0__('#add-to-wish-list').removeAttr('disabled');
+            }
+            else {
+                if (jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row:checked').length)
+                    jquery__WEBPACK_IMPORTED_MODULE_0__('#add-to-wish-list').removeAttr('disabled');
+                else
+                    jquery__WEBPACK_IMPORTED_MODULE_0__('#add-to-wish-list').attr('disabled', 'disabled');
+            }
         });
     }
 }
