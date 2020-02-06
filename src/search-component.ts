@@ -6,9 +6,11 @@ import { ManageCheckbox } from './manage-checkbox';
 
 export class SearchComponent {
     private service: MovieService;
+    private movies: MovieModel[];
 
     public constructor() {
         this.service = new MovieService();
+        this.movies = new Array<MovieModel>();
 
         this._setHandler();
     }
@@ -22,13 +24,16 @@ export class SearchComponent {
                     // Call service...
                     this.service.getByTitle(searchField.val().toString().trim())
                     .then((movies: MovieModel[]) => {
-                        movies.forEach((movie: MovieModel, index: number) => {
-                            const rowComponent: RowComponent = new RowComponent(movie);
-                            rowComponent.load().then((row: JQuery) => {
-                                $('tbody').append(row);
+                        if (!this._compareTo(movies)) {
+                            this._removeRows();
+                            movies.forEach((movie: MovieModel, index: number) => {
+                                const rowComponent: RowComponent = new RowComponent(movie);
+                                rowComponent.load().then((row: JQuery) => {
+                                    $('tbody').append(row);
+                                });
                             });
-                        });
-                        new ManageCheckbox();
+                            new ManageCheckbox();
+                        }
                     });
                 } else {
                     // Removes all previous rows
@@ -47,5 +52,20 @@ export class SearchComponent {
 
     private _removeRows(): void {
         $('tbody tr').remove();
+    }
+
+    private _compareTo(movies: Array<MovieModel>): boolean {
+        let isEqual: boolean = false;
+
+        if (this.movies.length !== 0) {
+            if (movies.length === this.movies.length) {
+                this.movies.forEach((stateMovie: MovieModel, index: number) => {
+                    if (stateMovie.compareTo(movies[index])) {
+                        isEqual = true;
+                    }
+                });
+            }
+        }
+        return isEqual;
     }
 }

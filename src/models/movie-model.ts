@@ -15,6 +15,10 @@ export class MovieModel {
         return this._year;
     }
 
+    public compareTo(movie: MovieModel): boolean {
+        return this._id === movie.id;
+    }
+    
     public deserialize(movie: any): MovieModel {
         //Object.assign(this, movie);
 

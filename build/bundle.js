@@ -9581,6 +9581,9 @@ class MovieModel {
     get year() {
         return this._year;
     }
+    compareTo(movie) {
+        return this._id === movie.id;
+    }
     deserialize(movie) {
         //Object.assign(this, movie);
         this._id = movie.idMovie;
@@ -9615,6 +9618,7 @@ __webpack_require__.r(__webpack_exports__);
 class SearchComponent {
     constructor() {
         this.service = new _services_movie_service__WEBPACK_IMPORTED_MODULE_1__["MovieService"]();
+        this.movies = new Array();
         this._setHandler();
     }
     _setHandler() {
@@ -9624,13 +9628,16 @@ class SearchComponent {
                 // Call service...
                 this.service.getByTitle(searchField.val().toString().trim())
                     .then((movies) => {
-                    movies.forEach((movie, index) => {
-                        const rowComponent = new _components_row_row_component__WEBPACK_IMPORTED_MODULE_2__["RowComponent"](movie);
-                        rowComponent.load().then((row) => {
-                            jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(row);
+                    if (!this._compareTo(movies)) {
+                        this._removeRows();
+                        movies.forEach((movie, index) => {
+                            const rowComponent = new _components_row_row_component__WEBPACK_IMPORTED_MODULE_2__["RowComponent"](movie);
+                            rowComponent.load().then((row) => {
+                                jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(row);
+                            });
                         });
-                    });
-                    new _manage_checkbox__WEBPACK_IMPORTED_MODULE_3__["ManageCheckbox"]();
+                        new _manage_checkbox__WEBPACK_IMPORTED_MODULE_3__["ManageCheckbox"]();
+                    }
                 });
             }
             else {
@@ -9644,6 +9651,19 @@ class SearchComponent {
     }
     _removeRows() {
         jquery__WEBPACK_IMPORTED_MODULE_0__('tbody tr').remove();
+    }
+    _compareTo(movies) {
+        let isEqual = false;
+        if (this.movies.length !== 0) {
+            if (movies.length === this.movies.length) {
+                this.movies.forEach((stateMovie, index) => {
+                    if (stateMovie.compareTo(movies[index])) {
+                        isEqual = true;
+                    }
+                });
+            }
+        }
+        return isEqual;
     }
 }
 
