@@ -1,4 +1,4 @@
-import { Comparable } from "./../core/interfaces/comparable-interface";
+import { Comparable } from './../core/interfaces/comparable-interface';
 
 export class MovieModel implements Comparable<MovieModel>{
     private _id: number;
