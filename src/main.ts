@@ -27,10 +27,7 @@ class Main {
 }
 
 // Main app instanciation
-document.addEventListener(
-    'DOMContentLoaded', // Event to listen...
-    () => { // What to do when event is triggered
-        console.log('Hey Buddy, i\'m ready... play now !');
-        new Main();
-    }
-);
+$(document).ready(() => {
+    console.log('Hey Buddy, i\'m ready... play now !');
+    new Main();
+});
