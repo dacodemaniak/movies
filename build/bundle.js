@@ -9539,10 +9539,12 @@ class SearchComponent {
             else {
                 // Removes all previous rows
                 this._removeRows();
+                this.movies = [];
             }
         });
         jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('search', (event) => {
             this._removeRows();
+            this.movies = [];
         });
     }
     _removeRows() {
@@ -9557,6 +9559,9 @@ class SearchComponent {
                 state.forEach((stateMovie, index) => {
                     if (stateMovie.compareTo(input[index])) {
                         isEqual = true;
+                    }
+                    else {
+                        isEqual = false;
                     }
                 });
             }
