@@ -9475,6 +9475,8 @@ class RowComponent {
                 jqView.find('[title]').html(this.movie.title);
                 jqView.find('[more]')
                     .attr('data-rel', this.movie.id);
+                jqView.find('[checkRow]')
+                    .attr('data-rel', this.movie.id);
                 resolve(jqView);
             });
         });
@@ -9501,6 +9503,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _row_row_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../row/row-component */ "./src/components/row/row-component.ts");
 /* harmony import */ var _manage_checkbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../manage-checkbox */ "./src/manage-checkbox.ts");
 /* harmony import */ var _core_modules_spinner_spinner_loader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../core/modules/spinner/spinner-loader */ "./src/core/modules/spinner/spinner-loader.ts");
+/* harmony import */ var _wishlist_wishlist_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../wishlist/wishlist-component */ "./src/components/wishlist/wishlist-component.ts");
+
 
 
 
@@ -9512,6 +9516,8 @@ class SearchComponent {
         this.service = new _services_movie_service__WEBPACK_IMPORTED_MODULE_1__["MovieService"]();
         this.movies = new Array();
         this.spinner = new _core_modules_spinner_spinner_loader__WEBPACK_IMPORTED_MODULE_5__["SpinnerLoader"]();
+        this.wishComponent = new _wishlist_wishlist_component__WEBPACK_IMPORTED_MODULE_6__["WishListComponent"]();
+        this.manageCheckbox = new _manage_checkbox__WEBPACK_IMPORTED_MODULE_4__["ManageCheckbox"]();
         this._setHandler();
     }
     _setHandler() {
@@ -9531,7 +9537,7 @@ class SearchComponent {
                                 jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').append(row);
                             });
                         });
-                        new _manage_checkbox__WEBPACK_IMPORTED_MODULE_4__["ManageCheckbox"]();
+                        this.manageCheckbox.setHandlers();
                     }
                 });
                 this.spinner.dismiss();
@@ -9540,6 +9546,7 @@ class SearchComponent {
                 // Removes all previous rows
                 this._removeRows();
                 this.movies = [];
+                this.manageCheckbox.removeHandlers();
             }
         });
         jquery__WEBPACK_IMPORTED_MODULE_0__('[type="search"]').on('search', (event) => {
@@ -9567,6 +9574,41 @@ class SearchComponent {
             }
         }
         return isEqual;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/components/wishlist/wishlist-component.ts":
+/*!*******************************************************!*\
+  !*** ./src/components/wishlist/wishlist-component.ts ***!
+  \*******************************************************/
+/*! exports provided: WishListComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WishListComponent", function() { return WishListComponent; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _core_modules_toast_toast_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../core/modules/toast/toast-module */ "./src/core/modules/toast/toast-module.ts");
+
+
+class WishListComponent {
+    constructor() {
+        this.button = jquery__WEBPACK_IMPORTED_MODULE_0__('#add-to-wish-list');
+        this._setHandlers();
+        this.toaster = new _core_modules_toast_toast_module__WEBPACK_IMPORTED_MODULE_1__["ToastModule"]();
+    }
+    _setHandlers() {
+        this.button.on('click', (event) => {
+            // Loop over selected movies and store it...
+            // Use Collection of checked rows and pass it to a service
+            // Adjust heart of toolbar if ever
+            // Just show a toast...
+            this.toaster.present();
+        });
     }
 }
 
@@ -9623,6 +9665,74 @@ class SpinnerLoader {
 
 /***/ }),
 
+/***/ "./src/core/modules/toast/toast-module.ts":
+/*!************************************************!*\
+  !*** ./src/core/modules/toast/toast-module.ts ***!
+  \************************************************/
+/*! exports provided: ToastModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToastModule", function() { return ToastModule; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+class ToastModule {
+    constructor(toastOptions) {
+        this.options = null;
+        this.options = {
+            caption: toastOptions ? toastOptions.caption : ''
+        };
+        this.options.duration = toastOptions && toastOptions.duration ? toastOptions.duration : 2.5;
+        this.options.height = toastOptions && toastOptions.height ? toastOptions.height : 6.25;
+        this.options.width = toastOptions && toastOptions.width ? toastOptions.width : 12.5;
+        this.options.entrance = toastOptions && toastOptions.entrance ? toastOptions.entrance : 'bounceInUp';
+        this.options.exit = toastOptions && toastOptions.exit ? toastOptions.exit : 'bounceOutDown';
+    }
+    set title(title) {
+        this.options.caption = title;
+    }
+    present() {
+        // Make a div with some decorations
+        const outerToastDiv = jquery__WEBPACK_IMPORTED_MODULE_0__('<div>');
+        outerToastDiv
+            .css('height', this.options.height)
+            .css('width', '100%')
+            .css('position', 'absolute');
+        const toastDiv = jquery__WEBPACK_IMPORTED_MODULE_0__('<div>');
+        toastDiv
+            .css('height', this.options.height + 'em')
+            .css('width', this.options.width + 'em')
+            .css('position', 'relative')
+            .css('bottom', '10%')
+            .css('background-color', '#999')
+            .css('margin', '0 auto')
+            .addClass('animated')
+            .addClass(this.options.entrance)
+            .html(this.options.caption)
+            .appendTo(outerToastDiv);
+        outerToastDiv.appendTo(jquery__WEBPACK_IMPORTED_MODULE_0__('body'));
+        // Make it disapear after amount of time
+        setTimeout(() => {
+            outerToastDiv
+                .removeClass('animated')
+                .removeClass(this.options.entrance)
+                .addClass('animated')
+                .addClass(this.options.exit);
+            console.log('removed entrance class');
+            // Till animation finished
+            setTimeout(() => {
+                outerToastDiv.remove();
+                console.log('Removed toast');
+            }, 1500);
+        }, this.options.duration * 1000);
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/main.ts":
 /*!*********************!*\
   !*** ./src/main.ts ***!
@@ -9632,8 +9742,11 @@ class SpinnerLoader {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _core_modules_spinner_spinner_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core/modules/spinner/spinner-loader */ "./src/core/modules/spinner/spinner-loader.ts");
-/* harmony import */ var _components_search_search_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/search/search-component */ "./src/components/search/search-component.ts");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _core_modules_spinner_spinner_loader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./core/modules/spinner/spinner-loader */ "./src/core/modules/spinner/spinner-loader.ts");
+/* harmony import */ var _components_search_search_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/search/search-component */ "./src/components/search/search-component.ts");
+
 
 
 /**
@@ -9644,17 +9757,16 @@ __webpack_require__.r(__webpack_exports__);
  */
 class Main {
     constructor() {
-        const loader = new _core_modules_spinner_spinner_loader__WEBPACK_IMPORTED_MODULE_0__["SpinnerLoader"]();
+        const loader = new _core_modules_spinner_spinner_loader__WEBPACK_IMPORTED_MODULE_1__["SpinnerLoader"]();
         loader.present();
         const title = document.querySelector('h1');
         title.innerHTML = 'Movies';
         loader.dismiss();
-        const searchComponent = new _components_search_search_component__WEBPACK_IMPORTED_MODULE_1__["SearchComponent"]();
+        const searchComponent = new _components_search_search_component__WEBPACK_IMPORTED_MODULE_2__["SearchComponent"]();
     }
 }
 // Main app instanciation
-document.addEventListener('DOMContentLoaded', // Event to listen...
-() => {
+jquery__WEBPACK_IMPORTED_MODULE_0__(document).ready(() => {
     console.log('Hey Buddy, i\'m ready... play now !');
     new Main();
 });
@@ -9682,10 +9794,13 @@ __webpack_require__.r(__webpack_exports__);
  *  Manage checkboxes of the movies / actors table
  */
 class ManageCheckbox {
-    constructor() {
-        this._setHandlers();
+    constructor() { }
+    removeHandlers() {
+        jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').off('click');
+        jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').off('click', '.check-row');
+        console.log('handlers was removed');
     }
-    _setHandlers() {
+    setHandlers() {
         jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').on('click', // Event to listen to
         (event) => {
             jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').prop('checked', jquery__WEBPACK_IMPORTED_MODULE_0__(event.target).prop('checked'));
@@ -9697,6 +9812,7 @@ class ManageCheckbox {
             }
         });
         jquery__WEBPACK_IMPORTED_MODULE_0__('tbody').on('click', '.check-row', (event) => {
+            console.log('Movie was checked or unchecked');
             const isChecked = jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row:checked').length === jquery__WEBPACK_IMPORTED_MODULE_0__('.check-row').length;
             jquery__WEBPACK_IMPORTED_MODULE_0__('#select-deselect').prop('checked', isChecked);
             // if any was selected
@@ -9710,6 +9826,7 @@ class ManageCheckbox {
                     jquery__WEBPACK_IMPORTED_MODULE_0__('#add-to-wish-list').attr('disabled', 'disabled');
             }
         });
+        console.log('handlers was set');
     }
 }
 

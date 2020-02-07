@@ -17,6 +17,8 @@ export class RowComponent {
                     jqView.find('[title]').html(this.movie.title);
                     jqView.find('[more]')
                         .attr('data-rel', this.movie.id);
+                    jqView.find('[checkRow]')
+                        .attr('data-rel', this.movie.id)
                     resolve(jqView);
                 }
             )

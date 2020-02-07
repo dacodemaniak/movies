@@ -1,20 +1,25 @@
 import * as $ from 'jquery';
+
 import { MovieService } from '../../services/movie-service';
 import { MovieModel } from '../../models/movie-model';
 import { RowComponent } from '../row/row-component';
 import { ManageCheckbox } from '../../manage-checkbox';
 import { SpinnerLoader } from './../../core/modules/spinner/spinner-loader';
+import { WishListComponent } from '../wishlist/wishlist-component';
 
 export class SearchComponent {
     private service: MovieService;
     private movies: MovieModel[]; // State
     private spinner: SpinnerLoader;
+    private manageCheckbox: ManageCheckbox;
+    private wishComponent: WishListComponent;
 
     public constructor() {
         this.service = new MovieService();
         this.movies = new Array<MovieModel>();
         this.spinner = new SpinnerLoader();
-
+        this.wishComponent = new WishListComponent();
+        this.manageCheckbox = new ManageCheckbox();
         this._setHandler();
     }
 
@@ -37,7 +42,7 @@ export class SearchComponent {
                                     $('tbody').append(row);
                                 });
                             });
-                            new ManageCheckbox();
+                            this.manageCheckbox.setHandlers();
                         }
                     });
                     this.spinner.dismiss();
@@ -45,6 +50,7 @@ export class SearchComponent {
                     // Removes all previous rows
                     this._removeRows();
                     this.movies = [];
+                    this.manageCheckbox.removeHandlers();
                 } 
             }
         );
